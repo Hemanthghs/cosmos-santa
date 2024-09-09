@@ -31,3 +31,7 @@ body {
 .canvas-container {
   touch-action: none; /* Disable touch gestures like scrolling */
 }
+
+canvas {
+  touch-action: none; 
+}
