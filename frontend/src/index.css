@@ -1,3 +1,33 @@
+@import url("https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --foreground: #ffffff;
+  --background: #09090a;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Libre Franklin", sans-serif !important;
+  color: var(--foreground);
+  background: var(--background);
+}
+
+.tab-btn {
+  @apply border-[1px] border-[#ffffff2d] font-medium text-lg rounded-full px-4 hover:opacity-85;
+}
+
+.tab-selected {
+  @apply bg-[#7e5cedc7] border-transparent;
+  transition: background-color 0.2s ease-in;
+}
+
+/* Add this CSS rule to disable touch actions on the canvas */
+.canvas-container {
+  touch-action: none; /* Disable touch gestures like scrolling */
+}
