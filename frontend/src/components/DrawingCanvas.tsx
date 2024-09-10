@@ -1,4 +1,10 @@
-import React, { useRef, useState, useEffect, MouseEvent, TouchEvent } from 'react';
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  MouseEvent,
+  TouchEvent,
+} from "react";
 
 const DrawingCanvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -10,35 +16,37 @@ const DrawingCanvas: React.FC = () => {
     const handleResize = () => {
       const canvas = canvasRef.current;
       if (canvas) {
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext("2d");
         if (ctx) {
           const windowInnerWidth = window.innerWidth;
           let widthPercent = 0.85;
           let heightPercent = 0.7;
           // Set canvas dimensions and scale
-          if(windowInnerWidth > 1000) {
+          if (windowInnerWidth > 1000) {
             widthPercent = 0.65;
           }
-          if(windowInnerWidth > 1600) {
+          if (windowInnerWidth > 1600) {
             widthPercent = 0.5;
           }
-          canvas.style.width = `${window.innerWidth*widthPercent}px`;
-          canvas.style.height = `${window.innerHeight*heightPercent}px`;
+          canvas.style.width = `${window.innerWidth * widthPercent}px`;
+          canvas.style.height = `${window.innerHeight * heightPercent}px`;
           const scale = window.devicePixelRatio;
-          canvas.width = Math.floor(window.innerWidth*widthPercent * scale);
-          canvas.height = Math.floor(window.innerHeight*heightPercent * scale);
+          canvas.width = Math.floor(window.innerWidth * widthPercent * scale);
+          canvas.height = Math.floor(
+            window.innerHeight * heightPercent * scale
+          );
           ctx.scale(scale, scale);
-          ctx.fillStyle = '#fff';
+          ctx.fillStyle = "#fff";
           ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
       }
     };
 
     handleResize(); // Initial resize
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -55,7 +63,7 @@ const DrawingCanvas: React.FC = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (ctx) {
       ctx.beginPath();
       ctx.moveTo(lastX, lastY);
@@ -89,11 +97,14 @@ const DrawingCanvas: React.FC = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (ctx) {
       ctx.beginPath();
       ctx.moveTo(lastX, lastY);
-      ctx.lineTo(touch.clientX - canvas.getBoundingClientRect().left, touch.clientY - canvas.getBoundingClientRect().top);
+      ctx.lineTo(
+        touch.clientX - canvas.getBoundingClientRect().left,
+        touch.clientY - canvas.getBoundingClientRect().top
+      );
       ctx.stroke();
     }
     setLastX(touch.clientX - canvas.getBoundingClientRect().left);
@@ -108,10 +119,10 @@ const DrawingCanvas: React.FC = () => {
   const clearCanvas = () => {
     const canvas = canvasRef.current;
     if (canvas) {
-      const ctx = canvas.getContext('2d');
+      const ctx = canvas.getContext("2d");
       if (ctx) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = "#fff";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       }
     }
@@ -120,13 +131,13 @@ const DrawingCanvas: React.FC = () => {
   const submitDrawing = async () => {
     const canvas = canvasRef.current;
     if (canvas) {
-      const imageData = canvas.toDataURL('image/png');
-      console.log('Submitting...', imageData);
+      const imageData = canvas.toDataURL("image/png");
+      console.log("Submitting...", imageData);
     }
   };
 
   return (
-    <div className="flex justify-center items-center bg-[#09090a]">
+    <div className="flex justify-center flex-col gap-4 items-center bg-[#09090a]">
       <div className="relative">
         <canvas
           ref={canvasRef}
@@ -144,13 +155,13 @@ const DrawingCanvas: React.FC = () => {
         >
           Clear
         </button>
-        <button
-          onClick={submitDrawing}
-          className="absolute top-4 right-4 bg-[#7f5ced] text-white p-2 rounded"
-        >
-          Submit
-        </button>
       </div>
+      <button
+        onClick={submitDrawing}
+        className={`btn1 right-4 bg-[#7f5ced] text-white p-2 rounded w-fit`}
+      >
+        Submit
+      </button>
     </div>
   );
 };
