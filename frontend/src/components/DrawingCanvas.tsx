@@ -6,6 +6,8 @@ import React, {
   TouchEvent,
 } from "react";
 
+const STROKE_WIDTH = 3;
+
 const DrawingCanvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -19,22 +21,36 @@ const DrawingCanvas: React.FC = () => {
         const ctx = canvas.getContext("2d");
         if (ctx) {
           const windowInnerWidth = window.innerWidth;
-          let widthPercent = 0.85;
+          let widthPercent = 0.65;
           let heightPercent = 0.7;
-          // Set canvas dimensions and scale
-          if (windowInnerWidth > 1000) {
-            widthPercent = 0.65;
+          let fixedHeight = 400;
+
+          if (windowInnerWidth < 650) {
+            widthPercent = 0.8;
           }
-          if (windowInnerWidth > 1600) {
+          if (windowInnerWidth > 1000) {
             widthPercent = 0.5;
           }
+
           canvas.style.width = `${window.innerWidth * widthPercent}px`;
-          canvas.style.height = `${window.innerHeight * heightPercent}px`;
+
+          if (windowInnerWidth < 1000) {
+            canvas.style.height = `${fixedHeight}px`;
+          } else {
+            canvas.style.height = `${window.innerHeight * heightPercent}px`;
+          }
+
           const scale = window.devicePixelRatio;
           canvas.width = Math.floor(window.innerWidth * widthPercent * scale);
-          canvas.height = Math.floor(
-            window.innerHeight * heightPercent * scale
-          );
+
+          if (windowInnerWidth < 1000) {
+            canvas.height = Math.floor(fixedHeight * scale);
+          } else {
+            canvas.height = Math.floor(
+              window.innerHeight * heightPercent * scale
+            );
+          }
+
           ctx.scale(scale, scale);
           ctx.fillStyle = "#fff";
           ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -42,7 +58,7 @@ const DrawingCanvas: React.FC = () => {
       }
     };
 
-    handleResize(); // Initial resize
+    handleResize();
     window.addEventListener("resize", handleResize);
 
     return () => {
@@ -65,6 +81,7 @@ const DrawingCanvas: React.FC = () => {
 
     const ctx = canvas.getContext("2d");
     if (ctx) {
+      ctx.lineWidth = STROKE_WIDTH;
       ctx.beginPath();
       ctx.moveTo(lastX, lastY);
       ctx.lineTo(event.nativeEvent.offsetX, event.nativeEvent.offsetY);
@@ -99,6 +116,7 @@ const DrawingCanvas: React.FC = () => {
 
     const ctx = canvas.getContext("2d");
     if (ctx) {
+      ctx.lineWidth = STROKE_WIDTH;
       ctx.beginPath();
       ctx.moveTo(lastX, lastY);
       ctx.lineTo(
@@ -131,37 +149,48 @@ const DrawingCanvas: React.FC = () => {
   const submitDrawing = async () => {
     const canvas = canvasRef.current;
     if (canvas) {
-      const imageData = canvas.toDataURL("image/png");
-      console.log("Submitting...", imageData);
+      console.log("Submitting...");
+      clearCanvas();
     }
   };
 
   return (
-    <div className="flex justify-center flex-col gap-4 items-center bg-[#09090a]">
-      <div className="relative">
-        <canvas
-          ref={canvasRef}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUpOrLeave}
-          onMouseLeave={handleMouseUpOrLeave}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        />
+    <div className="space-y-6">
+      <div className="flex flex-col gap-6 md:flex-row">
+        <div className="picture flex-1 flex justify-center items-center">
+          <img className="w-[70%] rounded-lg" src="/sample-picture-2.jpg" />
+        </div>
+        <div className="drawing flex-1 flex justify-center flex-col gap-4 items-center bg-[#09090a]">
+          <div className="relative">
+            <canvas
+              className="rounded-lg"
+              ref={canvasRef}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUpOrLeave}
+              onMouseLeave={handleMouseUpOrLeave}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            />
+            <button
+              onClick={clearCanvas}
+              className="absolute top-4 right-4 bg-[#0df128a5] text-white p-2 rounded flex items-center"
+            >
+              <span className="mr-2 text-white">&#10006;</span>
+              Clear
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="flex items-center justify-center">
         <button
-          onClick={clearCanvas}
-          className="absolute top-4 left-4 bg-[#7f5ced] text-white p-2 rounded"
+          onClick={submitDrawing}
+          className="bg-[#0df128a5] text-white p-2 rounded"
         >
-          Clear
+          Submit Drawing
         </button>
       </div>
-      <button
-        onClick={submitDrawing}
-        className={`btn1 right-4 bg-[#7f5ced] text-white p-2 rounded w-fit`}
-      >
-        Submit
-      </button>
     </div>
   );
 };

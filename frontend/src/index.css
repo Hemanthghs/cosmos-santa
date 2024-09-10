@@ -23,7 +23,7 @@ body {
 }
 
 .tab-selected {
-  @apply bg-[#7e5cedc7] border-transparent;
+  @apply bg-[#0df128a5] border-transparent;
   transition: background-color 0.2s ease-in;
 }
 
