@@ -11,7 +11,7 @@ const LeaderBoard: React.FC = () => {
     <div className="flex justify-center bg-[#09090a]">
       <div className="bg-[#1e1e1e] shadow-md rounded-lg overflow-hidden w-full max-w-4xl">
         <table className="min-w-full divide-y divide-[#2a2a2a]">
-          <thead className="bg-[#7f5ced] text-white">
+          <thead className="bg-[#0df128a5] text-white">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Rank</th>
               <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Name</th>
